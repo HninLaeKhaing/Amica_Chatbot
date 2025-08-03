@@ -6,6 +6,11 @@ import nltk
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
 
+import nltk
+nltk.download('punkt')
+nltk.download('wordnet')
+
+
 lemmatizer = WordNetLemmatizer()
 model = load_model('model.h5')
 intents = json.loads(open('intents.json').read())
