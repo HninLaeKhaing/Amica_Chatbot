@@ -2,7 +2,6 @@ import json
 import random
 import numpy as np
 import pickle
-import nltk
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
 
