@@ -1,5 +1,3 @@
-nltk.download('punkt_tab')
-nltk.download('wordnet')
 import streamlit as st
 from chatbot import chatbot_response
 
