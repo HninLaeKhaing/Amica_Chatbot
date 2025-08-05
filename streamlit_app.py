@@ -1,6 +1,3 @@
-pip install -r requirements.txt
-
-import nltk
 nltk.download('punkt_tab')
 nltk.download('wordnet')
 import streamlit as st
