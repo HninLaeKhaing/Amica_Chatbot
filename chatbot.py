@@ -4,11 +4,15 @@ import numpy as np
 import pickle
 from nltk.stem import WordNetLemmatizer
 from keras.models import load_model
-
 import nltk
-nltk.download('punkt')
-nltk.download('wordnet')
+import os
 
+# Set up NLTK download directory for Streamlit Cloud compatibility
+NLTK_DATA_PATH = os.path.join(os.path.dirname(__file__), "nltk_data")
+os.makedirs(NLTK_DATA_PATH, exist_ok=True)
+nltk.download('punkt', download_dir=NLTK_DATA_PATH)
+nltk.download('wordnet', download_dir=NLTK_DATA_PATH)
+nltk.data.path.append(NLTK_DATA_PATH)
 
 lemmatizer = WordNetLemmatizer()
 model = load_model('model.h5')
@@ -23,7 +27,7 @@ def clean_up_sentence(sentence):
 
 def bow(sentence, words):
     sentence_words = clean_up_sentence(sentence)
-    bag = [0]*len(words)
+    bag = [0] * len(words)
     for s in sentence_words:
         for i, w in enumerate(words):
             if w == s:
