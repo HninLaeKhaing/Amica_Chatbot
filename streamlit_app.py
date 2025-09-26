@@ -1,10 +1,10 @@
-%%writefile streamlit_app.py
-
 import streamlit as st
 import google.generativai as genai
 
 # --- IMPORTANT: PASTE YOUR GEMINI API KEY HERE ---
-API_KEY = "/content/ai_studio_code.txt"
+# For security, it's better to use Streamlit Secrets in a real application.
+# For now, you can paste it directly for testing.
+API_KEY = "YOUR_API_KEY_HERE"
 
 # Configure the Gemini API with your key
 genai.configure(api_key=API_KEY)
@@ -47,6 +47,7 @@ try:
     # Function to display chat history
     def show_chat_history():
         for message in st.session_state.chat.history:
+            # Use a modern chat message UI
             with st.chat_message(name="You" if message.role == "user" else "Pandora"):
                 st.markdown(message.parts[0].text)
 
@@ -55,20 +56,27 @@ try:
 
     # --- Main Chat Logic ---
     if user_prompt := st.chat_input("How are you feeling today?"):
+        # Display the user's message immediately
         with st.chat_message("You"):
             st.markdown(user_prompt)
 
+        # Critical Safety Check before calling the API
         suicide_keywords = ["kill myself", "want to die", "commit suicide", "end my life", "suicidal"]
         if any(keyword in user_prompt.lower() for keyword in suicide_keywords):
-            safety_response = "I'm very sorry to hear you're feeling this way... Please seek help immediately by contacting this helpline: 9152987821."
+            safety_response = "I'm very sorry to hear you're feeling this way, but you have so much to look forward to. Please seek help immediately by contacting this helpline: 9152987821. Help is available, and you don't have to go through this alone."
             with st.chat_message("Pandora"):
                 st.markdown(safety_response)
+            # Manually add to history to display it
             st.session_state.chat.history.append({'role': 'user', 'parts': [{'text': user_prompt}]})
             st.session_state.chat.history.append({'role': 'model', 'parts': [{'text': safety_response}]})
+
         else:
+            # If no safety keywords, send the prompt to the Gemini API
             response = st.session_state.chat.send_message(user_prompt)
+            # Display the AI's response
             with st.chat_message("Pandora"):
                 st.markdown(response.text)
 
 except Exception as e:
-    st.error(f"An error occurred. Check your API key. Error: {e}")
+    st.error(f"An error occurred. It might be due to an incorrect API key or other issues. Please check your setup. Error: {e}")
+
