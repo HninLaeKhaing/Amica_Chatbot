@@ -3,3 +3,7 @@ nltk
 keras
 tensorflow
 numpy
+
+google-generativeai
+streamlit
+pyngrok
