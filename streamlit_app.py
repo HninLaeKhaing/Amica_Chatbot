@@ -4,7 +4,7 @@ import google.generativai as genai
 # --- IMPORTANT: PASTE YOUR GEMINI API KEY HERE ---
 # For security, it's better to use Streamlit Secrets in a real application.
 # For now, you can paste it directly for testing.
-API_KEY = "YOUR_API_KEY_HERE"
+API_KEY = "AIzaSyDbdGmOXYtyddLjWhi_eOMr7JVjRg-J9ds"
 
 # Configure the Gemini API with your key
 genai.configure(api_key=API_KEY)
