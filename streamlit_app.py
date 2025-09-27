@@ -1,73 +1,95 @@
 import streamlit as st
 import google.generativeai as genai
+from streamlit_webrtc import webrtc_streamer
+import speech_recognition as sr
+import pyttsx3
+import threading
 
 # --- PAGE CONFIG ---
 st.set_page_config(page_title="Kura AI", page_icon="🧠", layout="centered")
 
-# --- CUSTOM CSS FOR A BOLD, PROFESSIONAL MARKETING LOOK ---
+# --- UPDATED CUSTOM CSS FOR 2025 MARKETING DESIGN TREND ---
 st.markdown("""
 <style>
-    /* Main app background with a dark, professional gradient */
+    /* Animated gradient background */
     [data-testid="stAppViewContainer"] {
-        background-image: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); /* Dark Slate to Dark Blue */
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 15s ease infinite;
+    }
+    @keyframes gradientShift {
+        0%{background-position:0% 50%;}
+        50%{background-position:100% 50%;}
+        100%{background-position:0% 50%;}
     }
 
-    /* General chat bubble styling */
+    /* Chat bubbles with smooth shadows and padding */
     .stChatMessage {
-        border-radius: 20px;
-        padding: 1rem 1.5rem;
-        margin-bottom: 1rem;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.2); /* Stronger shadow for dark background */
-        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 1.25rem 2rem;
+        margin-bottom: 1.25rem;
+        box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+        border: 1px solid rgba(255,255,255,0.15);
+        transition: box-shadow 0.3s ease;
+    }
+    .stChatMessage:hover {
+        box-shadow: 0 10px 20px rgba(0,0,0,0.25);
     }
 
-    /* User message styling: clean white on dark background */
+    /* User messages */
     [data-testid="stChatMessageContent"] {
-        background-color: #ffffff;
-        color: #1f2937; /* Dark gray text for high contrast */
+        background-color: #fefefe;
+        color: #111827;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.05rem;
     }
 
-    /* Bot message styling with a strong, confident blue */
+    /* Bot messages */
     [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-        background-color: #2563eb; /* Strong Blue */
-        color: #ffffff; /* White text for high contrast */
+        background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+        color: #fff;
+        font-weight: 600;
     }
 
-    /* Bot avatar styling with a bold dark red */
+    /* Avatar container */
     .stChatMessage > div:first-child {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
+    /* Avatar styling */
     [data-testid="stChatMessageContent"] .avatar-bot {
-        width: 50px;
-        height: 50px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
-        background-color: #991b1b; /* Blue */
+        background-color: #b91c1c;
         display: flex;
         justify-content: center;
         align-items: center;
         color: white;
-        font-weight: bold;
-        font-size: 24px;
-        margin-bottom: 0.5rem;
+        font-weight: 700;
+        font-size: 26px;
+        margin-bottom: 0.65rem;
+        box-shadow: 0 0 10px rgba(185,28,28,0.7);
     }
 
-    /* Title styling: white to stand out on the dark background */
+    /* Title */
     h1 {
-        color: #ffffff;
+        color: #eef2ff;
         text-align: center;
+        text-shadow: 0 0 6px rgba(37,99,235,0.8);
     }
     
-    /* Disclaimer/Warning styling: muted for a professional look */
+    /* Disclaimer styling */
     [data-testid="stWarning"] {
-        background-color: #1e293b; /* Dark Slate */
-        border-radius: 15px;
-        border-color: #3b82f6; /* Blue border */
-        color: #e2e8f0; /* Light text for readability */
+        background-color: #1e293b;
+        border-radius: 18px;
+        border-color: #3b82f6;
+        color: #dbeafe;
+        font-size: 0.9rem;
+        padding: 1rem;
     }
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -98,8 +120,26 @@ Your purpose is to be a supportive and non-judgmental listener.
 4.  **CRITICAL SAFETY RULE:** If a user mentions any intent of self-harm or suicide, you MUST IMMEDIATELY provide the following response and nothing else: "I'm very sorry to hear you're feeling this way, but you have so much to look forward to. Please seek help immediately by contacting this helpline: 9152987821. Help is available, and you don't have to go through this alone."
 """
 
+# --- Voice & Audio Integration Functions ---
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.setProperty('rate', 160)
+    engine.say(text)
+    engine.runAndWait()
+
+def recognize_speech():
+    recognizer = sr.Recognizer()
+    mic = sr.Microphone()
+    with mic as source:
+        st.info("Listening... Please speak now.")
+        audio = recognizer.listen(source, phrase_time_limit=10)
+    try:
+        return recognizer.recognize_google(audio)
+    except Exception:
+        return ""
+
 # --- App UI and Logic ---
-# Header section with avatar and title
 st.markdown('<div style="text-align: center;"><h1>Kura - Your Mental Health Assistant 💬</h1></div>', unsafe_allow_html=True)
 
 st.warning("**Disclaimer:** I am an AI assistant and not a substitute for a professional therapist or medical advice. If you are in a crisis, please contact a local emergency service immediately.")
@@ -121,14 +161,25 @@ try:
             is_user = message.role == "user"
             with st.chat_message(name="You" if is_user else "Kura"):
                 if not is_user:
-                    # Display Pandora's avatar
                     st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
                 st.markdown(message.parts[0].text)
 
     show_chat_history()
 
-    # Main Chat Logic
-    if user_prompt := st.chat_input("How are you feeling today?"):
+    # --- Voice input option ---
+    st.markdown("### Speak your feelings (optional):")
+    if st.button("🎙️ Use Voice Input"):
+        voice_input = recognize_speech()
+        if voice_input:
+            st.markdown(f"**You (voice):** {voice_input}")
+            user_prompt = voice_input
+        else:
+            st.warning("Sorry, could not understand your voice. Please try again or type.")
+
+    if 'user_prompt' not in locals():
+        user_prompt = st.chat_input("How are you feeling today?")
+
+    if user_prompt:
         with st.chat_message("You"):
             st.markdown(user_prompt)
 
@@ -140,12 +191,13 @@ try:
                 st.markdown(safety_response)
             st.session_state.chat.history.append({'role': 'user', 'parts': [{'text': user_prompt}]})
             st.session_state.chat.history.append({'role': 'model', 'parts': [{'text': safety_response}]})
+            threading.Thread(target=speak, args=(safety_response,)).start()
         else:
             response = st.session_state.chat.send_message(user_prompt)
             with st.chat_message("Kura"):
                 st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
                 st.markdown(response.text)
+            threading.Thread(target=speak, args=(response.text,)).start()
 
 except Exception as e:
     st.error(f"An error occurred during app execution. Please check your API key or model availability. Error: {e}")
-
