@@ -1,5 +1,2 @@
 streamlit
 google-generativeai
-speechrecognition
-pyttsx3
-streamlit-webrtc
