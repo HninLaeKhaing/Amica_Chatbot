@@ -1,6 +1,5 @@
 import streamlit as st
 import google.generativeai as genai
-from streamlit_webrtc import webrtc_streamer
 import speech_recognition as sr
 import pyttsx3
 import threading
@@ -106,7 +105,7 @@ except Exception as e:
 
 # --- System Prompt ---
 SYSTEM_PROMPT = """
-You are Pandora, a highly empathetic and caring AI assistant focused on mental well-being.
+You are Kura, a highly empathetic and caring AI assistant focused on mental well-being.
 Your purpose is to be a supportive and non-judgmental listener.
 **Your Persona:**
 - **Name:** Kura
@@ -145,7 +144,6 @@ st.markdown('<div style="text-align: center;"><h1>Kura - Your Mental Health Assi
 st.warning("**Disclaimer:** I am an AI assistant and not a substitute for a professional therapist or medical advice. If you are in a crisis, please contact a local emergency service immediately.")
 st.markdown("---")
 
-# Initialize the Gemini model
 try:
     model = genai.GenerativeModel(
         model_name="gemini-2.5-pro",
@@ -155,7 +153,6 @@ try:
     if "chat" not in st.session_state:
         st.session_state.chat = model.start_chat(history=[])
 
-    # Function to display chat history
     def show_chat_history():
         for message in st.session_state.chat.history:
             is_user = message.role == "user"
@@ -166,7 +163,7 @@ try:
 
     show_chat_history()
 
-    # --- Voice input option ---
+    # Voice input button
     st.markdown("### Speak your feelings (optional):")
     if st.button("🎙️ Use Voice Input"):
         voice_input = recognize_speech()
