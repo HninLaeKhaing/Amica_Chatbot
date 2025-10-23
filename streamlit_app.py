@@ -11,15 +11,18 @@ st.set_page_config(page_title="Amica AI", page_icon="🧠", layout="centered")
 # --- CUSTOM CSS ---
 st.markdown("""
 <style>
+/* CHANGED: Background color to white */
 [data-testid="stAppViewContainer"] {
-    background-image: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    background-color: #ffffff; /* Solid White */
+    background-image: none; /* Removed gradient to ensure solid white */
 }
 .stChatMessage {
     border-radius: 20px;
     padding: 1rem 1.5rem;
     margin-bottom: 1rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    border: 1px solid rgba(255,255,255,0.1);
+    /* CHANGED: Adjusted border for visibility on white background */
+    border: 1px solid rgba(0,0,0,0.1); 
 }
 [data-testid="stChatMessageContent"] {
     background-color: light pink;
@@ -47,12 +50,14 @@ st.markdown("""
     font-size: 24px;
     margin-bottom: 0.5rem;
 }
-h1 { color: #ffffff; text-align: center; }
+/* CHANGED: Header color to black for readability on white background */
+h1 { color: #000000; text-align: center; } 
 [data-testid="stWarning"] {
     background-color: #1e293b;
     border-radius: 15px;
     border-color: #3b82f6;
-    color: #e2e8f0;
+    /* CHANGED: Warning text color to dark grey for readability on white page background */
+    color: #333333; 
 }
 </style>
 """, unsafe_allow_html=True)
