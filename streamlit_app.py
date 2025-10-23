@@ -53,7 +53,7 @@ st.markdown("""
 /* CHANGED: Header color to black for readability on white background */
 h1 { color: Black; text-align: center; } 
 [data-testid="stWarning"] {
-    background-color: #1e293b;
+    background-color: black;
     border-radius: 15px;
     border-color: #3b82f6;
     /* CHANGED: Warning text color to dark blue for readability on white page background */
