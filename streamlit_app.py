@@ -26,7 +26,7 @@ st.markdown("""
     color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-    background-color: Black;
+    background-color: white;
     color: #ffffff;
 }
 .stChatMessage > div:first-child {
@@ -38,11 +38,11 @@ st.markdown("""
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: White;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: indigo;
     font-weight: bold;
     font-size: 24px;
     margin-bottom: 0.5rem;
