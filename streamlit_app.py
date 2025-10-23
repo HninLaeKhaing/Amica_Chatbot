@@ -58,7 +58,7 @@ h1 { color: #ffffff; text-align: center; }
 """, unsafe_allow_html=True)
 
 # --- API CONFIG ---
-API_KEY = "AIzaSyAs-vkAA9MB405bzY3lSsMJtb0VsxScbSc"
+API_KEY = "AIzaSyDbdGmOXYtyddLjWhi_eOMr7JVjRg-J9ds"
 
 try:
     genai.configure(api_key=API_KEY)
