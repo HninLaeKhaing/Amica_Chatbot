@@ -12,7 +12,7 @@ st.set_page_config(page_title="Amica AI", page_icon="🧠", layout="centered")
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
-    background-image: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    background-image: linear-gradient(light pink, #0f172a 0%, #1e3a8a 100%);
 }
 .stChatMessage {
     border-radius: 20px;
@@ -22,11 +22,11 @@ st.markdown("""
     border: 1px solid rgba(255,255,255,0.1);
 }
 [data-testid="stChatMessageContent"] {
-    background-color: light pink;
+    background-color: Black;
     color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-    background-color: #2563eb;
+    background-color: White;
     color: #ffffff;
 }
 .stChatMessage > div:first-child {
@@ -38,7 +38,7 @@ st.markdown("""
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: #991b1b;
+    background-color: indigo;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -90,9 +90,9 @@ if "chat" not in st.session_state:
 def show_chat_history():
     for msg in st.session_state.chat.history:
         is_user = msg.role == "user"
-        with st.chat_message("You" if is_user else "Kura"):
+        with st.chat_message("You" if is_user else "Amica"):
             if not is_user:
-                st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
+                st.markdown('<div class="avatar-bot">A</div>', unsafe_allow_html=True)
             st.markdown(msg.parts[0].text)
 show_chat_history()
 
@@ -141,6 +141,6 @@ if user_prompt:
     else:
         response = st.session_state.chat.send_message(user_prompt)
         with st.chat_message("Amica"):
-            st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
+            st.markdown('<div class="avatar-bot">A</div>', unsafe_allow_html=True)
             st.markdown(response.text)
             speak_text(response.text)
