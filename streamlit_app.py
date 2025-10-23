@@ -12,7 +12,7 @@ st.set_page_config(page_title="Amica AI", page_icon="🧠", layout="centered")
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
-    background-image: linear-gradient(White, #0f172a 0%, #1e3a8a 100%);
+    background-image: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
 }
 .stChatMessage {
     border-radius: 20px;
@@ -22,11 +22,11 @@ st.markdown("""
     border: 1px solid rgba(255,255,255,0.1);
 }
 [data-testid="stChatMessageContent"] {
-    background-color: indigo;
+    background-color: light pink;
     color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-    background-color: white;
+    background-color: #2563eb;
     color: #ffffff;
 }
 .stChatMessage > div:first-child {
@@ -38,18 +38,18 @@ st.markdown("""
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: black;
+    background-color: #991b1b;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: indigo;
+    color: white;
     font-weight: bold;
     font-size: 24px;
     margin-bottom: 0.5rem;
 }
 h1 { color: #ffffff; text-align: center; }
 [data-testid="stWarning"] {
-    background-color: White;
+    background-color: #1e293b;
     border-radius: 15px;
     border-color: #3b82f6;
     color: #e2e8f0;
