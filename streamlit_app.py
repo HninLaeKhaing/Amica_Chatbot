@@ -12,7 +12,7 @@ st.set_page_config(page_title="Amica AI", page_icon="🧠", layout="centered")
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
-    background-image: linear-gradient(Blue, #0f172a 0%, #1e3a8a 100%);
+    background-image: linear-gradient(White, #0f172a 0%, #1e3a8a 100%);
 }
 .stChatMessage {
     border-radius: 20px;
