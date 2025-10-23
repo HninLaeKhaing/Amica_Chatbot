@@ -26,7 +26,7 @@ st.markdown("""
     color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-    background-color: purple;
+    background-color: White;
     color: #ffffff;
 }
 .stChatMessage > div:first-child {
@@ -38,7 +38,7 @@ st.markdown("""
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background-color: indigo;
+    background-color: White;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,7 +49,7 @@ st.markdown("""
 }
 h1 { color: #ffffff; text-align: center; }
 [data-testid="stWarning"] {
-    background-color: #1e293b;
+    background-color: White;
     border-radius: 15px;
     border-color: #3b82f6;
     color: #e2e8f0;
