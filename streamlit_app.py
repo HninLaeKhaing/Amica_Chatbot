@@ -22,7 +22,7 @@ st.markdown("""
     border: 1px solid rgba(255,255,255,0.1);
 }
 [data-testid="stChatMessageContent"] {
-    background-color: Light pink;
+    background-color: white;
     color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
