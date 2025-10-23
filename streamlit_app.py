@@ -14,7 +14,7 @@ st.markdown("### Speak or type to share how you feel 💬")
 # -----------------------------
 # Gemini API Key Setup
 # -----------------------------
-api_key = st.secrets.get("GEMINI_API_KEY", None)
+api_key = st.secrets.get("AIzaSyAs-vkAA9MB405bzY3lSsMJtb0VsxScbSc", None)
 if not api_key:
     st.error("Please add your Gemini API key in Streamlit Secrets (Settings → Secrets).")
     st.stop()
