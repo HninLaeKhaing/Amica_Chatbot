@@ -11,74 +11,86 @@ st.set_page_config(page_title="Amica AI", page_icon="🧠", layout="centered")
 # --- CUSTOM CSS ---
 st.markdown("""
 <style>
-/* Background for a calm, soothing feel */
+/* Background: Deep Slate/Charcoal Gradient for elegance and focus */
 [data-testid="stAppViewContainer"] {
-    background-image: linear-gradient(135deg, #e0f2f1 0%, #b2ebf2 100%); /* Light Teal/Aqua Gradient */
+    background-image: linear-gradient(135deg, #1b263b 0%, #0d121c 100%); /* Deep Navy/Slate Gradient */
 }
 
 /* Base chat message container style */
 .stChatMessage {
-    border-radius: 20px;
+    border-radius: 15px;
     padding: 1rem 1.5rem;
     margin-bottom: 1rem;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Softer shadow */
-    border: 1px solid rgba(0,0,0,0.05); /* Very light border */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Deeper shadow for elevation */
+    border: 1px solid rgba(255,255,255,0.1); /* Subtle white border */
 }
 
-/* User chat message content (Soft Green) */
+/* User chat message content (Soft White/Cream on Dark) */
+/* Note: Since the background is dark, the user content should be light for contrast */
 [data-testid="stChatMessageContent"]:has(div:not(.avatar-bot)) {
-    background-color: #f1f8e9; /* Very light green, almost white */
-    color: #38761d; /* Dark green text for readability */
+    background-color: #384250; /* Muted dark blue-gray */
+    color: #f0f4f8; /* Soft white text */
 }
 
-/* Bot chat message content (Calm Blue) */
+/* Bot chat message content (A gentle contrast color, like Muted Blue-Green) */
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-    background-color: #e3f2fd; /* Very light blue */
-    color: #1565c0; /* Medium blue text */
+    background-color: #4a5c6a; /* Slate Blue-Gray */
+    color: #c4d4e3; /* Very light blue-gray text */
 }
 
 /* Aligning avatar/name for all messages */
 .stChatMessage > div:first-child {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Aligned to the left for better reading flow */
+  align-items: flex-start;
 }
 
-/* Bot avatar style (Gentle Purple/Lavender) */
+/* Bot avatar style (Classic Gold/Brass for an elegant touch) */
 [data-testid="stChatMessageContent"] .avatar-bot {
-    width: 40px; /* Slightly smaller avatar */
+    width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #90a4ae; /* Muted grey-blue for neutrality/calm */
+    background-color: #8a6c4c; /* Muted Gold/Brass */
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: #f0f4f8; /* Soft white text */
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 0.5rem;
-    margin-right: 0.5rem; /* Space between avatar and text if needed */
+    margin-right: 0.5rem;
 }
 
-/* Header text color */
+/* Header text color (Subtle Gold/Cream on Dark) */
 h1 { 
-    color: #00796b; /* Dark Teal for a professional and calm heading */
+    color: #c4d4e3; /* Light Gray-Blue */
     text-align: center; 
 }
 
-/* Warning box style (for disclaimer) */
+/* Warning box style (for disclaimer - maintaining elegance with dark contrast) */
 [data-testid="stWarning"] {
-    background-color: #fffde7; /* Very light yellow for gentle notice */
+    background-color: #2b3a4a; /* Darker background */
     border-radius: 15px;
-    border-color: #ffb300; /* Amber border */
-    color: #5d4037; /* Dark text for contrast */
+    border-color: #8a6c4c; /* Gold/Brass border */
+    color: #f0f4f8; /* Soft white text */
+}
+
+/* Info box style (for listening notification) */
+[data-testid="stInfo"] {
+    background-color: #384250;
+    color: #f0f4f8;
+    border-color: #4a5c6a;
 }
 
 /* Input box styling for consistency */
 [data-testid="stChatInput"] {
-    border-top: 1px solid #b2ebf2;
+    border-top: 1px solid #384250;
     padding-top: 10px;
-    background-color: #ffffff; /* White input background */
+    background-color: #1b263b; /* Dark input background matching main background */
+}
+/* Ensure the input text is visible */
+[data-testid="stChatInput"] input {
+    color: #f0f4f8;
 }
 </style>
 """, unsafe_allow_html=True)
