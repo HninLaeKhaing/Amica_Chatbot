@@ -6,7 +6,7 @@ import tempfile
 import os
 
 # --- PAGE CONFIG ---
-st.set_page_config(page_title="Kura AI", page_icon="🧠", layout="centered")
+st.set_page_config(page_title="Amica AI", page_icon="🧠", layout="centered")
 
 # --- CUSTOM CSS ---
 st.markdown("""
@@ -22,8 +22,8 @@ st.markdown("""
     border: 1px solid rgba(255,255,255,0.1);
 }
 [data-testid="stChatMessageContent"] {
-    background-color: #ffffff;
-    color: #1f2937;
+    background-color: light pink;
+    color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
     background-color: #2563eb;
@@ -68,7 +68,7 @@ except Exception as e:
 
 # --- SYSTEM PROMPT ---
 SYSTEM_PROMPT = """
-You are Kura, a highly empathetic and caring AI assistant focused on mental well-being.
+You are Amica, a highly empathetic and caring AI assistant focused on mental well-being.
 You are a supportive and non-judgmental listener.
 Always acknowledge the user's feelings and respond warmly.
 If a user expresses suicidal thoughts, say:
@@ -77,7 +77,7 @@ Never diagnose or prescribe. Always stay comforting and safe.
 """
 
 # --- HEADER ---
-st.markdown('<div style="text-align: center;"><h1>Kura - Your Mental Health Assistant 💬</h1></div>', unsafe_allow_html=True)
+st.markdown('<div style="text-align: center;"><h1>Amica - Your Mental Health Assistant 💬</h1></div>', unsafe_allow_html=True)
 st.warning("**Disclaimer:** I am not a substitute for professional therapy. If you are in crisis, please contact a local helpline immediately.")
 st.markdown("---")
 
@@ -123,10 +123,7 @@ def speak_text(text):
 # --- CHAT LOGIC ---
 col1, col2 = st.columns([1, 1])
 with col1:
-    user_prompt = st.chat_input("Type how you feel or use voice 🎤 below:")
-with col2:
-    if st.button("🎙️ Speak"):
-        user_prompt = listen_to_mic()
+    user_prompt = st.chat_input("Type how you feel")
 
 if user_prompt:
     with st.chat_message("You"):
@@ -135,15 +132,15 @@ if user_prompt:
     suicide_keywords = ["kill myself", "want to die", "commit suicide", "end my life", "suicidal"]
     if any(k in user_prompt.lower() for k in suicide_keywords):
         safety_response = "I'm very sorry to hear you're feeling this way... Please seek help immediately by contacting this helpline: 9152987821."
-        with st.chat_message("Kura"):
-            st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
+        with st.chat_message("Amica"):
+            st.markdown('<div class="avatar-bot">A</div>', unsafe_allow_html=True)
             st.markdown(safety_response)
             speak_text(safety_response)
         st.session_state.chat.history.append({'role': 'user', 'parts': [{'text': user_prompt}]})
         st.session_state.chat.history.append({'role': 'model', 'parts': [{'text': safety_response}]})
     else:
         response = st.session_state.chat.send_message(user_prompt)
-        with st.chat_message("Kura"):
+        with st.chat_message("Amica"):
             st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
             st.markdown(response.text)
             speak_text(response.text)
