@@ -97,7 +97,7 @@ def show_chat_history():
         is_user = msg.role == "user"
         with st.chat_message("You" if is_user else "Amica"):
             if not is_user:
-                st.markdown('<div class="avatar-bot">A</div>', unsafe_allow_html=True)
+                
             st.markdown(msg.parts[0].text)
 show_chat_history()
 
@@ -138,7 +138,7 @@ if user_prompt:
     if any(k in user_prompt.lower() for k in suicide_keywords):
         safety_response = "I'm very sorry to hear you're feeling this way... Please seek help immediately by contacting this helpline: 9152987821."
         with st.chat_message("Amica"):
-            st.markdown('<div class="avatar-bot">A</div>', unsafe_allow_html=True)
+            
             st.markdown(safety_response)
             speak_text(safety_response)
         st.session_state.chat.history.append({'role': 'user', 'parts': [{'text': user_prompt}]})
@@ -146,6 +146,6 @@ if user_prompt:
     else:
         response = st.session_state.chat.send_message(user_prompt)
         with st.chat_message("Amica"):
-            st.markdown('<div class="avatar-bot">A</div>', unsafe_allow_html=True)
+            
             st.markdown(response.text)
             speak_text(response.text)
