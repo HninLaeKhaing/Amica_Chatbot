@@ -12,7 +12,7 @@ st.set_page_config(page_title="Amica AI", page_icon="🧠", layout="centered")
 st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
-    background-image: linear-gradient(light pink, #0f172a 0%, #1e3a8a 100%);
+    background-image: linear-gradient(Blue, #0f172a 0%, #1e3a8a 100%);
 }
 .stChatMessage {
     border-radius: 20px;
@@ -22,11 +22,11 @@ st.markdown("""
     border: 1px solid rgba(255,255,255,0.1);
 }
 [data-testid="stChatMessageContent"] {
-    background-color: Black;
+    background-color: Light pink;
     color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-    background-color: White;
+    background-color: purple;
     color: #ffffff;
 }
 .stChatMessage > div:first-child {
