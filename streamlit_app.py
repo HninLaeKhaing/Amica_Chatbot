@@ -22,11 +22,11 @@ st.markdown("""
     border: 1px solid rgba(255,255,255,0.1);
 }
 [data-testid="stChatMessageContent"] {
-    background-color: white;
+    background-color: indigo;
     color: indigo;
 }
 [data-testid="stChatMessageContent"]:has(.avatar-bot) {
-    background-color: White;
+    background-color: Black;
     color: #ffffff;
 }
 .stChatMessage > div:first-child {
