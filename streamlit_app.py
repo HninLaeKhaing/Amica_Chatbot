@@ -1,86 +1,149 @@
 import streamlit as st
-import tempfile
-import base64
 import google.generativeai as genai
+import speech_recognition as sr
+from gtts import gTTS
+import tempfile
+import os
 
-# -----------------------------
-# CONFIGURE GEMINI API
-# -----------------------------
-st.set_page_config(page_title="AI Mental Health Voice Chatbot", page_icon="💬", layout="centered")
+# --- PAGE CONFIG ---
+st.set_page_config(page_title="Kura AI", page_icon="🧠", layout="centered")
 
-st.title("🧠 AI Mental Health Chatbot (Voice + Text)")
-st.markdown("### Speak or type to share how you feel 💬")
+# --- CUSTOM CSS ---
+st.markdown("""
+<style>
+[data-testid="stAppViewContainer"] {
+    background-image: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+}
+.stChatMessage {
+    border-radius: 20px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+[data-testid="stChatMessageContent"] {
+    background-color: #ffffff;
+    color: #1f2937;
+}
+[data-testid="stChatMessageContent"]:has(.avatar-bot) {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+.stChatMessage > div:first-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+[data-testid="stChatMessageContent"] .avatar-bot {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #991b1b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 0.5rem;
+}
+h1 { color: #ffffff; text-align: center; }
+[data-testid="stWarning"] {
+    background-color: #1e293b;
+    border-radius: 15px;
+    border-color: #3b82f6;
+    color: #e2e8f0;
+}
+</style>
+""", unsafe_allow_html=True)
 
-# -----------------------------
-# Gemini API Key Setup
-# -----------------------------
-api_key = st.secrets.get("AIzaSyDbdGmOXYtyddLjWhi_eOMr7JVjRg-J9ds", None)
-if not api_key:
-    st.error("Please add your Gemini API key in Streamlit Secrets (Settings → Secrets).")
+# --- API CONFIG ---
+API_KEY = "AIzaSyDbdGmOXYtyddLjWhi_eOMr7JVjRg-J9ds"
+
+try:
+    genai.configure(api_key=API_KEY)
+except Exception as e:
+    st.error(f"API configuration error: {e}")
     st.stop()
 
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel("gemini-1.5-pro")
+# --- SYSTEM PROMPT ---
+SYSTEM_PROMPT = """
+You are Kura, a highly empathetic and caring AI assistant focused on mental well-being.
+You are a supportive and non-judgmental listener.
+Always acknowledge the user's feelings and respond warmly.
+If a user expresses suicidal thoughts, say:
+"I'm very sorry to hear you're feeling this way, but please seek immediate help by contacting this helpline: 9152987821. You are not alone."
+Never diagnose or prescribe. Always stay comforting and safe.
+"""
 
-# -----------------------------
-# FUNCTION: Process Audio (Browser Input)
-# -----------------------------
-def get_voice_input():
-    st.subheader("🎙️ Speak your thoughts")
-    audio_input = st.audio_input("Record your message")
-
-    if audio_input:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
-            tmp.write(audio_input.read())
-            tmp_path = tmp.name
-
-        with open(tmp_path, "rb") as f:
-            audio_bytes = f.read()
-
-        # Send audio to Gemini for transcription
-        st.info("🔍 Processing your voice...")
-        response = model.generate_content([
-            {"role": "user", "parts": [
-                {"mime_type": "audio/wav", "data": base64.b64encode(audio_bytes).decode()},
-                {"text": "Transcribe this voice message and summarize the emotion behind it."}
-            ]}
-        ])
-        return response.text
-
-    return None
-
-# -----------------------------
-# FUNCTION: Get Gemini Chatbot Reply
-# -----------------------------
-def get_chatbot_reply(prompt):
-    full_prompt = (
-        "You are a kind, empathetic mental health assistant. "
-        "Always reply with supportive, calm, and encouraging language.\n\n"
-        f"User: {prompt}\nTherapist:"
-    )
-    response = model.generate_content(full_prompt)
-    return response.text
-
-# -----------------------------
-# MAIN APP
-# -----------------------------
-tab1, tab2 = st.tabs(["🎤 Voice Mode", "⌨️ Text Mode"])
-
-with tab1:
-    user_message = get_voice_input()
-    if user_message:
-        st.write(f"🗣️ You said: **{user_message}**")
-        bot_reply = get_chatbot_reply(user_message)
-        st.success(f"🤖 Chatbot: {bot_reply}")
-
-with tab2:
-    user_text = st.text_input("How are you feeling today?")
-    if st.button("Send"):
-        if user_text:
-            bot_reply = get_chatbot_reply(user_text)
-            st.success(f"🤖 Chatbot: {bot_reply}")
-        else:
-            st.warning("Please type something first!")
-
+# --- HEADER ---
+st.markdown('<div style="text-align: center;"><h1>Kura - Your Mental Health Assistant 💬</h1></div>', unsafe_allow_html=True)
+st.warning("**Disclaimer:** I am not a substitute for professional therapy. If you are in crisis, please contact a local helpline immediately.")
 st.markdown("---")
-st.caption("Built with ❤️ using Streamlit + Gemini AI")
+
+# --- MODEL INIT ---
+model = genai.GenerativeModel("gemini-2.5-pro", system_instruction=SYSTEM_PROMPT)
+if "chat" not in st.session_state:
+    st.session_state.chat = model.start_chat(history=[])
+
+# --- DISPLAY HISTORY ---
+def show_chat_history():
+    for msg in st.session_state.chat.history:
+        is_user = msg.role == "user"
+        with st.chat_message("You" if is_user else "Kura"):
+            if not is_user:
+                st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
+            st.markdown(msg.parts[0].text)
+show_chat_history()
+
+# --- SPEECH TO TEXT ---
+def listen_to_mic():
+    recognizer = sr.Recognizer()
+    with sr.Microphone() as source:
+        st.info("🎤 Listening... Speak now.")
+        audio = recognizer.listen(source, phrase_time_limit=6)
+        try:
+            text = recognizer.recognize_google(audio)
+            st.success(f"You said: {text}")
+            return text
+        except sr.UnknownValueError:
+            st.warning("Sorry, I didn’t catch that. Please try again.")
+        except sr.RequestError:
+            st.error("Speech recognition service unavailable.")
+    return ""
+
+# --- TEXT TO SPEECH ---
+def speak_text(text):
+    tts = gTTS(text)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp:
+        tts.save(tmp.name)
+        st.audio(tmp.name, format="audio/mp3")
+        os.remove(tmp.name)
+
+# --- CHAT LOGIC ---
+col1, col2 = st.columns([1, 1])
+with col1:
+    user_prompt = st.chat_input("Type how you feel or use voice 🎤 below:")
+with col2:
+    if st.button("🎙️ Speak"):
+        user_prompt = listen_to_mic()
+
+if user_prompt:
+    with st.chat_message("You"):
+        st.markdown(user_prompt)
+
+    suicide_keywords = ["kill myself", "want to die", "commit suicide", "end my life", "suicidal"]
+    if any(k in user_prompt.lower() for k in suicide_keywords):
+        safety_response = "I'm very sorry to hear you're feeling this way... Please seek help immediately by contacting this helpline: 9152987821."
+        with st.chat_message("Kura"):
+            st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
+            st.markdown(safety_response)
+            speak_text(safety_response)
+        st.session_state.chat.history.append({'role': 'user', 'parts': [{'text': user_prompt}]})
+        st.session_state.chat.history.append({'role': 'model', 'parts': [{'text': safety_response}]})
+    else:
+        response = st.session_state.chat.send_message(user_prompt)
+        with st.chat_message("Kura"):
+            st.markdown('<div class="avatar-bot">K</div>', unsafe_allow_html=True)
+            st.markdown(response.text)
+            speak_text(response.text)
