@@ -50,14 +50,14 @@ st.markdown("""
     font-size: 24px;
     margin-bottom: 0.5rem;
 }
-/* CHANGED: Header color to black for readability on white background */
+/* CHANGED: Header color to black for readability on white background (Title Content Black) */
 h1 { color: #000000; text-align: center; } 
 [data-testid="stWarning"] {
     background-color: #1e293b;
     border-radius: 15px;
     border-color: #3b82f6;
-    /* CHANGED: Warning text color to dark grey for readability on white page background */
-    color: #333333; 
+    /* CHANGED: Warning text color to Tomato for the disclaimer content */
+    color: tomato; 
 }
 </style>
 """, unsafe_allow_html=True)
@@ -82,7 +82,9 @@ Never diagnose or prescribe. Always stay comforting and safe.
 """
 
 # --- HEADER ---
-st.markdown('<div style="text-align: center;"><h1>Amica - Your Mental Health Assistant 💬</h1></div>', unsafe_allow_html=True)
+# Title content is styled by the 'h1' CSS rule.
+st.markdown('<div style="text-align: center;"><h1>Amica - Your Mental Health Assistant 💬</h1></div>', unsafe_allow_html=True) 
+# Disclaimer content is styled by the '[data-testid="stWarning"]' CSS rule.
 st.warning("**Disclaimer:** I am not a substitute for professional therapy. If you are in crisis, please contact a local helpline immediately.")
 st.markdown("---")
 
