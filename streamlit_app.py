@@ -13,7 +13,7 @@ st.markdown("""
 <style>
 /* CHANGED: Background color to white */
 [data-testid="stAppViewContainer"] {
-    background-color: #87CEEB; /* Solid White */
+    background-color: #ffffff; /* Solid White */
     background-image: none; /* Removed gradient to ensure solid white */
 }
 .stChatMessage {
