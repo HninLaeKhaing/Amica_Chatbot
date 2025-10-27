@@ -25,5 +25,5 @@ Amica AI is a **Streamlit-based chatbot** powered by the **Google Gemini-2.5-Pro
 
 
 ### ⚠️ Important Disclaimer
-
-    Amica AI is not a substitute for professional therapy, psychological, or medical advice. It is an AI tool designed for supportive listening and informational purposes only. If you are experiencing a mental health crisis or suicidal thoughts, please contact a local emergency service or a professional helpline immediately.
+    
+Amica AI is not a substitute for professional therapy, psychological, or medical advice. It is an AI tool designed for supportive listening and informational purposes only. If you are experiencing a mental health crisis or suicidal thoughts, please contact a local emergency service or a professional helpline immediately.
