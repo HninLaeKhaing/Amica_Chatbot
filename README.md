@@ -41,7 +41,7 @@ For security, use an environment variable instead of hardcoding the key.
     Set the environment variable (replace YOUR_ACTUAL_API_KEY):
     Bash
 
-    export GEMINI_API_KEY="YOUR_ACTUAL_API_KEY"
+    export GEMINI_API_KEY="AIzaSyDbdGmOXYtyddLjWhi_eOMr7JVjRg-J9ds"
 
     Modify app.py to read the key securely. You should change the API configuration block in your script to use os.environ.get() instead of a literal string.
 
