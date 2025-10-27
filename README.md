@@ -31,6 +31,31 @@ Save the provided Python script into a file named **`app.py`**.
 Install all necessary Python packages using pip:
 
 ```bash
+pip install streamlit google-genai speechrecognition gtts
+# Note: On some systems, especially for microphone use, you might also need to install PyAudio.
 
+3. Configure API Key (Crucial Step)
 
+For security, use an environment variable instead of hardcoding the key.
 
+    Set the environment variable (replace YOUR_ACTUAL_API_KEY):
+    Bash
+
+    export GEMINI_API_KEY="YOUR_ACTUAL_API_KEY"
+
+    Modify app.py to read the key securely. You should change the API configuration block in your script to use os.environ.get() instead of a literal string.
+
+🏃 How to Run the Application
+
+    Ensure your dependencies are installed and the GEMINI_API_KEY environment variable is set in your terminal session.
+
+    Run the Streamlit application:
+    Bash
+
+    streamlit run app.py
+
+    The application will automatically open in your default web browser (usually at http://localhost:8501).
+
+⚠️ Important Disclaimer
+
+    Amica AI is not a substitute for professional therapy, psychological, or medical advice. It is an AI tool designed for supportive listening and informational purposes only. If you are experiencing a mental health crisis or suicidal thoughts, please contact a local emergency service or a professional helpline immediately.
